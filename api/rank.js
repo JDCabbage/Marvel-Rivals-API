@@ -12,14 +12,18 @@ export default async function handler(req, res) {
     const response = await axios.get(
       `https://marvelrivalsapi.com/api/v1/player/${encodeURIComponent(username)}`,
       {
-        headers: {
-          "x-api-key": API_KEY,
-        },
+        headers: { "x-api-key": API_KEY },
       }
     );
 
+    console.log("📦 Full API Response:", response.data);
+
     const latestRank = response.data.rank_history?.[0];
-    if (!latestRank) return res.send(`${username} has no recorded rank yet.`);
+    console.log("🎯 latestRank:", latestRank);
+
+    if (!latestRank) {
+      return res.send(`${username} has no recorded rank yet.`);
+    }
 
     const message = `${username} is ${latestRank.rank} with ${latestRank.points} points.`;
 
@@ -27,8 +31,8 @@ export default async function handler(req, res) {
       ? res.send(message)
       : res.json({ message });
 
-  } catch (error) {
-    console.error("API error:", error?.response?.data || error.message);
+  } catch (err) {
+    console.error("🔥 API error:", err?.response?.data || err.message);
     return res.status(500).send("Failed to fetch player rank.");
   }
 }
