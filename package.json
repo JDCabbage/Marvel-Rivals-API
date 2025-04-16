@@ -1,0 +1,9 @@
+{
+  "name": "marvel-rivals-api",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "api/rank.js",
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}
