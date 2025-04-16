@@ -9,24 +9,29 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await axios.get(`https://marvelrivalsapi.com/api/v1/player/${encodeURIComponent(username)}`, {
-      headers: {
-        "x-api-key": API_KEY,
-      },
-    });
+    const response = await axios.get(
+      `https://marvelrivalsapi.com/api/v1/player/${encodeURIComponent(username)}`,
+      {
+        headers: {
+          "x-api-key": API_KEY,
+        },
+      }
+    );
 
-    const latestRank = response.data.rank_history?.[0];
-    if (!latestRank) {
-      return res.send(`${username} has no recorded rank yet.`);
-    }
+    // Get current visible rank
+    const currentRank = response.data?.player?.rank?.rank || "Unranked";
 
-    const message = `${username} is ${latestRank.rank} with ${latestRank.points} points.`;
+    // Optional: use points from rank history (if available)
+    const points = response.data?.rank_history?.[0]?.points || "unknown";
+
+    const message = `${username} is ${currentRank} with ${points} points.`;
+
     return platform === "nightbot" || platform === "streamelements"
       ? res.send(message)
       : res.json({ message });
 
   } catch (err) {
-    console.error("❌ API error:", err?.response?.data || err.message);
+    console.error("❌ API Error:", err?.response?.data || err.message);
     return res.status(500).send("Failed to fetch player rank.");
   }
 }
