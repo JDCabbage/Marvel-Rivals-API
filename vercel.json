@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/rank/([^/]+)/([^/]+)",
+      "dest": "/api/rank?username=$1&platform=$2"
+    }
+  ]
+}
