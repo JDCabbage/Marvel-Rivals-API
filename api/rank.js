@@ -24,7 +24,9 @@ export default async function handler(req, res) {
     // Optional: use points from rank history (if available)
     const points = response.data?.rank_history?.[0]?.points || "unknown";
 
-    const message = `${username} is ${currentRank} with ${points} points.`;
+    const message = points
+  ? `${username} is ${rank} with ${points} points.`
+  : `${username} is ${rank}.`;
 
     return platform === "nightbot" || platform === "streamelements"
       ? res.send(message)
