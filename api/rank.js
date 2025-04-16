@@ -4,6 +4,7 @@ export default async function handler(req, res) {
   const { username, platform } = req.query;
   const API_KEY = process.env.API_KEY;
 
+  // 👇 Check for required query params
   if (!username || !platform) {
     return res.status(400).send("Missing username or platform");
   }
@@ -18,11 +19,7 @@ export default async function handler(req, res) {
       }
     );
 
-    console.log("📦 API response:", JSON.stringify(response.data, null, 2));
-
-    const rankHistory = response.data?.rank_history;
-    const latestRank = Array.isArray(rankHistory) && rankHistory.length > 0 ? rankHistory[0] : null;
-
+    const latestRank = response.data.rank_history?.[0];
     if (!latestRank) {
       return res.send(`${username} has no recorded rank yet.`);
     }
@@ -33,8 +30,8 @@ export default async function handler(req, res) {
       ? res.send(message)
       : res.json({ message });
 
-  } catch (error) {
-    console.error("❌ API Error:", error?.response?.data || error.message);
+  } catch (err) {
+    console.error("🔥 API error:", err?.response?.data || err.message);
     return res.status(500).send("Failed to fetch player rank.");
   }
 }
