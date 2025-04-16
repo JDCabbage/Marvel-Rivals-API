@@ -10,9 +10,9 @@ export default async function handler(req, res) {
 
   try {
     const response = await axios.get(
-      `https://marvelrivalsapi.com/api/v1/player/${encodeURIComponent(username)}`,
-      {
-        headers: {
+        `https://marvelrivalsapi.com/api/v1/player/${encodeURIComponent(username)}`,
+        {
+          headers: {
           "x-api-key": API_KEY,
         },
       }
